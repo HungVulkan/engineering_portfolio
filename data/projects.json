@@ -1,19 +1,19 @@
 [
   {
+    "title": "HCMUS ADC Oscilloscope",
+    "role": "Microcontroller course · final project",
+    "desc": "A digital oscilloscope on a dual-core setup: STM32F303RE for sampling and an ESP32 driving an ILI9488 TFT display.",
+    "date": "2026-03",
+    "github": "https://github.com/HonagF/HCMUS_ADC_Oscilloscope",
+    "tags": ["STM32", "ESP32", "SPI", "ADC", "TFT"]
+  },
+  {
     "title": "APDS9960 AirPad Controller",
     "role": "Course project",
     "desc": "A small project for the Measurement and Measurement Instruments subject.",
     "date": "2026-05",
     "github": "https://github.com/HungVulkan/APDS9960-AirPad-Controller",
     "tags": ["C", "APDS9960", "Sensor"]
-  },
-  {
-    "title": "HCMUS ADC Oscilloscope",
-    "role": "Microcontroller course · final project",
-    "desc": "A digital oscilloscope on a dual-core setup: STM32F303RE for sampling and an ESP32 driving an ILI9488 TFT display.",
-    "date": "2026-06",
-    "github": "https://github.com/HonagF/HCMUS_ADC_Oscilloscope",
-    "tags": ["STM32", "ESP32", "SPI", "ADC", "TFT"]
   },
   {
     "title": "RTL & Physical Design Learning",
