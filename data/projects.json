@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Escape Game on AK Embedded Base Kit",
+    "role": "Embedded bootcamp",
+    "desc": "A game built on the AK Embedded Base Kit (STM32L151) for the FTel Embedded Bootcamp.",
+    "date": "2026-02",
+    "github": "https://github.com/HungVulkan/Escape_Game_FTel",
+    "tags": ["STM32", "UART", "OLED"]
+  },
+  {
+    "title": "APDS9960 AirPad Controller",
+    "role": "Course project",
+    "desc": "A small project for the Measurement and Measurement Instruments subject.",
+    "date": "2026-05",
+    "github": "https://github.com/HungVulkan/APDS9960-AirPad-Controller",
+    "tags": ["C", "APDS9960", "Sensor"]
+  },
+  {
+    "title": "HCMUS ADC Oscilloscope",
+    "role": "Microcontroller course · final project",
+    "desc": "A digital oscilloscope on a dual-core setup: STM32F303RE for sampling and an ESP32 driving an ILI9488 TFT display.",
+    "date": "2026-06",
+    "github": "https://github.com/HonagF/HCMUS_ADC_Oscilloscope",
+    "tags": ["STM32", "ESP32", "SPI", "ADC", "TFT"]
+  },
+  {
+    "title": "Hardware Learning Blog",
+    "role": "Learning portfolio",
+    "desc": "Structured notes on digital logic, Verilog / SystemVerilog, FPGA, RISC-V, IC design and embedded systems.",
+    "date": "2026-09",
+    "link": "https://hungvulkan.github.io/hardware-learning/",
+    "tags": ["Verilog", "FPGA", "RISC-V", "Jekyll"]
+  },
+  {
+    "title": "RTL & Physical Design Learning",
+    "role": "Learning portfolio",
+    "desc": "RTL design, Verilog practice, FPGA projects, synthesis, STA and physical design learning.",
+    "date": "2026-10",
+    "github": "https://github.com/HungVulkan/rtl-pd-learning",
+    "tags": ["Verilog", "FPGA", "Synthesis", "STA"]
+  }
+]

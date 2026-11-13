@@ -1,0 +1,19 @@
+[
+  {
+    "title": "EXAMPLE: Embedded Systems Fundamentals",
+    "issuer": "Example Academy",
+    "date": "2026-11-10",
+    "link": "https://example.com/verify/abc123",
+    "image": "certs/example.jpg"
+  },
+  {
+    "title": "EXAMPLE: Intro to TinyML (link only, no image)",
+    "issuer": "Example Academy",
+    "date": "2026-09-02",
+    "link": "https://example.com/verify/def456"
+  },
+  {
+    "title": "EXAMPLE: Image only, no link, no date",
+    "issuer": "Another Issuer"
+  }
+]
