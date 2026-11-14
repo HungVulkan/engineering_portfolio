@@ -1,6 +1,6 @@
 # Portfolio · Vũ Quốc Hùng
 
-Personal portfolio of a 3rd-year Electronics and Communication Engineering student at VNU-HCMUS. Focus: embedded systems, hardware, Edge AI / TinyML and RTOS.
+Personal portfolio of a 3rd-year Electronics and Communication Engineering student at VNU-HCMUS. Focus: physical design (RTL to layout, STA). Looking for a physical design internship.
 
 **Pages:** General · Certificates · Projects
 
