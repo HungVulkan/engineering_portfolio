@@ -1,0 +1,6 @@
+{
+  "Embedded": ["STM32", "ESP32", "RTOS", "SPI", "UART", "I2C", "ADC", "TFT", "OLED", "Sensor", "APDS9960", "C", "Edge AI", "TinyML"],
+  "IC Design": ["Digital Design", "VLSI", "SoC", "Verilog", "SystemVerilog", "FPGA", "RISC-V", "Synthesis", "STA", "Physical Design"],
+  "Data": ["Power BI", "Data Analytics", "Python"],
+  "Web": ["Jekyll", "HTML", "CSS", "JavaScript"]
+}
