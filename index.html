@@ -9,12 +9,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="index.html"><b>VQH</b><i>_</i>portfolio</a>
+      <a class="brand" href="index.html"><img class="brand-logo" src="assets/favicon.png" alt="" width="28" height="28"><span><b>VQH</b><i>_</i>portfolio</span></a>
       <nav class="nav">
         <a href="index.html" aria-current="page">General</a>
         <a href="certificates.html">Certificates</a>
@@ -28,7 +29,10 @@
     <div class="hero">
       <div>
         <p class="eyebrow">// ECE · VNU-HCMUS · FETEL</p>
-        <h1>Vũ Quốc Hùng</h1>
+        <div class="name-row">
+          <img class="avatar" src="assets/logo.png" alt="Logo of Vũ Quốc Hùng" width="112" height="112">
+          <h1>Vũ Quốc Hùng</h1>
+        </div>
         <p class="lead">
           3rd-year student in <strong>Electronics and Communication Engineering</strong> at VNU-HCMUS.
           I'm interested in <strong>embedded systems, hardware, Edge AI / TinyML</strong> and <strong>RTOS</strong>,
@@ -67,9 +71,8 @@
         <rect x="74" y="74" width="172" height="172" rx="11" fill="none" stroke="#f3ecd8" stroke-opacity=".25"/>
         <circle cx="94" cy="94" r="7" fill="#f3ecd8" fill-opacity=".55"/>
         <g font-family="IBM Plex Mono, monospace" fill="#f3ecd8" text-anchor="middle">
-          <text x="160" y="150" font-size="30" font-weight="600">VQH</text>
-          <text x="160" y="178" font-size="13" fill-opacity=".75">ECE · HCMUS</text>
-          <text x="160" y="214" font-size="11" fill="#c9a227">SPI · UART · I2C · ADC</text>
+          <text x="160" y="164" font-size="30" font-weight="600">VQH</text>
+          <text x="160" y="192" font-size="13" fill-opacity=".75">ECE · HCMUS</text>
         </g>
       </svg>
     </div>
@@ -103,6 +106,28 @@
           <p>Digital logic, Verilog / SystemVerilog, FPGA, RISC-V and IC design. Notes are on my
             <a href="https://hungvulkan.github.io/hardware-learning/" target="_blank" rel="noopener">hardware learning blog</a>.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- ================= EDUCATION ================= -->
+    <section id="education">
+      <div class="sec-head"><h2>Education</h2></div>
+      <div class="edu-list">
+        <article class="edu">
+          <div class="edu-logo"><img src="assets/schools/hcmus.png" alt="VNUHCM - University of Science logo" loading="lazy"></div>
+          <div class="edu-body">
+            <h3>VNUHCM - University of Science</h3>
+            <p>Bachelor of Science, Electronics and Communications Engineering</p>
+            <span class="date">Sep 2024 – 2028</span>
+          </div>
+        </article>
+        <article class="edu">
+          <div class="edu-logo"><img src="assets/schools/lhp.png" alt="Le Hong Phong High School for the Gifted logo" loading="lazy"></div>
+          <div class="edu-body">
+            <h3>Le Hong Phong High School for the Gifted, HCMC, Vietnam</h3>
+            <span class="date">Sep 2021 – May 2024</span>
+          </div>
+        </article>
       </div>
     </section>
 
