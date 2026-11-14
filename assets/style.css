@@ -249,3 +249,12 @@ button.btn:not(.ghost):hover { background: var(--pcb-dark); }
   .edu { gap: 14px; padding: 14px 16px; }
   .edu-logo { width: 62px; height: 62px; }
 }
+
+/* ---------- Status pill (open to internships) ---------- */
+.status {
+  display: inline-flex; align-items: center; gap: 9px; margin: -8px 0 22px;
+  font-family: var(--mono); font-size: .8rem; font-weight: 500; color: var(--pcb-dark);
+  background: rgba(31, 93, 58, .09); border: 1px solid rgba(31, 93, 58, .22);
+  padding: 5px 12px; border-radius: 999px;
+}
+.status .dot { width: 8px; height: 8px; border-radius: 50%; background: #2f9e5b; box-shadow: 0 0 0 3px rgba(47, 158, 91, .22); }
