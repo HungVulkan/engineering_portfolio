@@ -153,6 +153,7 @@
     box.href = item.image; box.target = "_blank"; box.rel = "noopener";
     var img = el("img");
     img.src = item.image; img.alt = item.title; img.loading = "lazy";
+    if (item.image_pos) img.style.objectPosition = item.image_pos; // e.g. "center top", "50% 20%"
     img.onerror = function () { box.replaceChildren(placeholder(item.title)); box.removeAttribute("href"); };
     box.appendChild(img);
     return box;
