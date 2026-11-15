@@ -91,16 +91,22 @@
     return Array.isArray(item.tags) ? item.tags.filter(Boolean).map(String) : [];
   }
 
-  // Free-text search over title, issuer, description and tags.
+  // Certificate field ("IC Design", "Data", ...): a string or a list of strings.
+  function fieldsOf(item) {
+    var f = item.field;
+    return (Array.isArray(f) ? f : [f]).filter(Boolean).map(String);
+  }
+
+  // Free-text search over title, issuer, description, field and tags.
   function matches(item, query) {
     if (!query) return true;
     var body = blocksOf(item).filter(function (b) { return typeof b === "string"; });
-    var hay = [item.title, item.issuer, item.desc, item.summary].concat(tagsOf(item), body).join(" ").toLowerCase();
+    var hay = [item.title, item.issuer, item.desc, item.summary].concat(tagsOf(item), fieldsOf(item), body).join(" ").toLowerCase();
     return hay.indexOf(query.toLowerCase()) !== -1;
   }
 
   /* ----- grouped filter logic ----- */
-  var OTHER = "Other", ISSUER = "Issuer";
+  var OTHER = "Other", ISSUER = "Issuer", FIELD = "Field";
 
   // categories.json: { "Embedded": ["STM32", ...], "IC Design": [...] }  →  lowercase tag → {group, name}
   function makeLookup(tax) {
@@ -113,7 +119,7 @@
     return map;
   }
 
-  // { group: [tag, ...] } for one item. Unknown tags go to "Other"; a certificate's issuer gets its own group.
+  // { group: [tag, ...] } for one item. Unknown tags go to "Other"; a certificate gets two groups: issuer and field.
   function facetsOf(item, lookup, kind) {
     var f = {};
     function add(g, t) {
@@ -121,8 +127,8 @@
       if (f[g].indexOf(t) === -1) f[g].push(t);
     }
     if (kind === "certificate") {
-      // Certificates are filtered by issuer only (no topic groups).
       if (item.issuer) add(ISSUER, item.issuer);
+      fieldsOf(item).forEach(function (t) { add(FIELD, t); });
       return f;
     }
     tagsOf(item).forEach(function (t) {
@@ -143,7 +149,7 @@
       });
     });
     var out = [];
-    Object.keys(tax || {}).concat([ISSUER, OTHER]).forEach(function (g) {
+    Object.keys(tax || {}).concat([ISSUER, FIELD, OTHER]).forEach(function (g) {
       if (!counts[g]) return;
       var listed = Array.isArray((tax || {})[g]) ? tax[g] : [];
       var tags = Object.keys(counts[g]).sort(function (a, b) {
@@ -158,19 +164,23 @@
     return out;
   }
 
-  // selected: { group: [tags] }. An item is shown if it has ANY of the selected tags (union),
-  // so ticking "Embedded" and "IC Design" together shows both kinds of items.
+  // selected: { group: [tags] }.
+  // Projects: an item is shown if it has ANY of the selected tags (union), so ticking "Embedded"
+  // and "IC Design" together shows both kinds of items.
+  // Certificates: issuer and field are different questions, so groups combine with AND and tags
+  // inside one group with OR ("Maven Silicon" + "IC Design" → Maven Silicon certificates in IC Design).
   function matchesFilters(item, selected, lookup, kind) {
     var keys = Object.keys(selected).filter(function (g) { return selected[g] && selected[g].length; });
     if (!keys.length) return true;
     var f = facetsOf(item, lookup, kind);
-    return keys.some(function (g) {
+    function hit(g) {
       return (f[g] || []).some(function (t) { return selected[g].indexOf(t) !== -1; });
-    });
+    }
+    return kind === "certificate" ? keys.every(hit) : keys.some(hit);
   }
 
   root.PortfolioLogic = {
-    sortNewest: sortNewest, formatDate: formatDate, dateLabel: dateLabel, tagsOf: tagsOf, matches: matches,
+    sortNewest: sortNewest, formatDate: formatDate, dateLabel: dateLabel, tagsOf: tagsOf, fieldsOf: fieldsOf, matches: matches,
     formatFullDate: formatFullDate, postId: postId, coverOf: coverOf, excerptOf: excerptOf,
     makeLookup: makeLookup, facetsOf: facetsOf, buildGroups: buildGroups, matchesFilters: matchesFilters
   };
@@ -258,7 +268,7 @@
     body.appendChild(el("h3", "", item.title));
     if (item.desc) body.appendChild(el("p", "", item.desc));
 
-    var tags = kind === "project" ? tagsOf(item) : [];
+    var tags = kind === "project" ? tagsOf(item) : kind === "certificate" ? fieldsOf(item) : [];
     if (tags.length) {
       var t = el("div", "tags");
       tags.forEach(function (x) { t.appendChild(el("span", "tag", x)); });
