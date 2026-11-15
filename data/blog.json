@@ -1,0 +1,26 @@
+[
+  {
+    "id": "bai-mau-1",
+    "title": "Bài viết mẫu: cách thêm bài vào blog",
+    "date": "2026-11-10",
+    "summary": "Bài mẫu để thử giao diện. Xoá hoặc sửa bài này trong data/blog.json rồi viết bài thật của bạn.",
+    "content": [
+      "Đây là đoạn văn đầu tiên. Mỗi chuỗi trong mảng content là một đoạn văn.",
+      { "heading": "Thêm ảnh" },
+      "Ảnh đặt ở đâu trong bài thì chèn khối ảnh ở đó. Muốn bao nhiêu ảnh cũng được.",
+      { "image": "blog/sample-board.svg", "caption": "Hình 1. Chú thích ảnh nằm ngay dưới ảnh và in nghiêng" },
+      "Giữa các ảnh có thể viết thêm đoạn văn bình thường.",
+      { "image": "blog/sample-scope.svg", "caption": "Hình 2. Ảnh thứ hai" },
+      "Muốn xuống dòng trong cùng một đoạn thì dùng \\n."
+    ]
+  },
+  {
+    "id": "bai-mau-2",
+    "title": "Bài viết mẫu thứ hai (chỉ có chữ)",
+    "date": "2026-11-15",
+    "content": [
+      "Bài này không có trường summary nên phần tóm tắt trên trang General được tự cắt từ đoạn văn đầu tiên. Nếu bạn muốn tự viết tóm tắt thì thêm trường summary như bài mẫu 1.",
+      "Bài này cũng không có ảnh nên thẻ trên trang General hiện ô màu xanh PCB với chữ viết tắt. Muốn có ảnh bìa thì thêm trường cover, hoặc chỉ cần chèn ảnh vào bài, ảnh đầu tiên sẽ được dùng làm ảnh bìa."
+    ]
+  }
+]
