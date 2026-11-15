@@ -258,3 +258,32 @@ button.btn:not(.ghost):hover { background: var(--pcb-dark); }
   padding: 5px 12px; border-radius: 999px;
 }
 .status .dot { width: 8px; height: 8px; border-radius: 50%; background: #2f9e5b; box-shadow: 0 0 0 3px rgba(47, 158, 91, .22); }
+
+/* ---------- Blog ---------- */
+.blog-card p {
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.post-wrap { max-width: 740px; margin: 0 auto; padding: 36px 0 24px; }
+.post-wrap > .more { font-family: var(--mono); font-size: .85rem; color: var(--pcb); font-weight: 600; text-decoration: none; }
+.post-wrap > .more:hover { text-decoration: underline; }
+.post { padding-top: 22px; }
+.post h1 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); line-height: 1.15; margin: 0 0 10px; }
+.post-date { margin: 0 0 26px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.post-body p { margin: 0 0 1.1em; font-size: 1.05rem; line-height: 1.75; color: #26362d; white-space: pre-line; }
+.post-body h2 { margin: 1.8em 0 .6em; font-size: 1.35rem; letter-spacing: -.01em; }
+.post-body h2::before { content: "▍"; color: var(--copper); margin-right: 8px; }
+
+.post-fig { margin: 1.6em 0; }
+.post-fig a { display: block; }
+.post-fig img {
+  width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); background: #e7dfca;
+}
+.post-fig figcaption {
+  margin-top: 8px; text-align: center; font-style: italic; font-size: .9rem; color: var(--muted); line-height: 1.5;
+}
+.img-missing {
+  border: 1.5px dashed var(--line); border-radius: 10px; padding: 26px 16px; text-align: center;
+  font-family: var(--mono); font-size: .8rem; color: var(--muted); background: rgba(251, 248, 240, .6);
+}
+.blog-card .media { text-decoration: none; }
