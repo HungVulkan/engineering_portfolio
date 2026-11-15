@@ -46,6 +46,47 @@
     return formatDate(it.date);
   }
 
+  // Full date for blog posts: "2026-11-15" → "15/11/2026". Falls back to "MM/YYYY", then to the raw text.
+  function formatFullDate(d) {
+    if (!d) return "";
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d);
+    return m ? m[3] + "/" + m[2] + "/" + m[1] : formatDate(d);
+  }
+
+  function slugify(s) {
+    return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d").replace(/Đ/g, "d").toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+
+  // Link id of a post: `id` if given, otherwise built from date + title ("2026-11-15-bai-viet-dau-tien").
+  function postId(post) {
+    if (post.id) return slugify(post.id);
+    return slugify(String(post.date || "").slice(0, 10) + " " + post.title);
+  }
+
+  function blocksOf(post) {
+    return Array.isArray(post.content) ? post.content : [];
+  }
+
+  // Card image: `cover` if given, otherwise the first image inside the post.
+  function coverOf(post) {
+    if (post.cover) return post.cover;
+    var b = blocksOf(post).filter(function (x) { return x && x.image; })[0];
+    return b ? b.image : "";
+  }
+
+  // Card text: `summary` if given, otherwise the start of the first paragraph.
+  function excerptOf(post, max) {
+    if (post.summary) return post.summary;
+    var p = blocksOf(post).filter(function (x) { return typeof x === "string" && x.trim(); })[0] || "";
+    p = p.replace(/\s+/g, " ").trim();
+    max = max || 160;
+    if (p.length <= max) return p;
+    var cut = p.slice(0, max), sp = cut.lastIndexOf(" ");
+    return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s.,;:!?-]+$/, "") + "…";
+  }
+
   function tagsOf(item) {
     return Array.isArray(item.tags) ? item.tags.filter(Boolean).map(String) : [];
   }
@@ -53,7 +94,8 @@
   // Free-text search over title, issuer, description and tags.
   function matches(item, query) {
     if (!query) return true;
-    var hay = [item.title, item.issuer, item.desc].concat(tagsOf(item)).join(" ").toLowerCase();
+    var body = blocksOf(item).filter(function (b) { return typeof b === "string"; });
+    var hay = [item.title, item.issuer, item.desc, item.summary].concat(tagsOf(item), body).join(" ").toLowerCase();
     return hay.indexOf(query.toLowerCase()) !== -1;
   }
 
@@ -129,6 +171,7 @@
 
   root.PortfolioLogic = {
     sortNewest: sortNewest, formatDate: formatDate, dateLabel: dateLabel, tagsOf: tagsOf, matches: matches,
+    formatFullDate: formatFullDate, postId: postId, coverOf: coverOf, excerptOf: excerptOf,
     makeLookup: makeLookup, facetsOf: facetsOf, buildGroups: buildGroups, matchesFilters: matchesFilters
   };
 
@@ -165,7 +208,47 @@
     return a;
   }
 
+  var DATA = { certificate: "data/certificates.json", project: "data/projects.json", blog: "data/blog.json" };
+
+  // Blog card: cover image + title + short summary + date. Click opens post.html?p=<id>.
+  function buildBlogCard(item) {
+    var href = "post.html?p=" + encodeURIComponent(postId(item));
+    var card = el("article", "card blog-card");
+
+    var media = el("a", "media");
+    media.href = href;
+    var cover = coverOf(item);
+    if (cover) {
+      var img = el("img");
+      img.src = cover; img.alt = item.title; img.loading = "lazy";
+      if (item.image_pos) img.style.objectPosition = item.image_pos;
+      img.onerror = function () { media.replaceChildren(placeholder(item.title)); };
+      media.appendChild(img);
+    } else {
+      media.appendChild(placeholder(item.title));
+    }
+    card.appendChild(media);
+
+    var body = el("div", "card-body");
+    body.appendChild(el("h3", "", item.title));
+    var text = excerptOf(item);
+    if (text) body.appendChild(el("p", "", text));
+
+    var foot = el("div", "card-foot");
+    foot.appendChild(el("span", "date", formatFullDate(item.date)));
+    var actions = el("div", "actions");
+    var more = el("a", "btn", "Read →");
+    more.href = href;
+    actions.appendChild(more);
+    foot.appendChild(actions);
+    body.appendChild(foot);
+
+    card.appendChild(body);
+    return card;
+  }
+
   function buildCard(item, kind) {
+    if (kind === "blog") return buildBlogCard(item);
     var card = el("article", "card");
     card.appendChild(buildMedia(item));
     var body = el("div", "card-body");
@@ -197,9 +280,8 @@
   function emptyBox(kind, filtered) {
     var d = el("div", "empty");
     if (filtered) { d.textContent = "No matches. Try another keyword or filter."; return d; }
-    var file = kind === "certificate" ? "data/certificates.json" : "data/projects.json";
     d.appendChild(document.createTextNode("Nothing here yet. Add an entry to "));
-    d.appendChild(el("code", "", file));
+    d.appendChild(el("code", "", DATA[kind]));
     d.appendChild(document.createTextNode("."));
     return d;
   }
@@ -336,8 +418,8 @@
   }
 
   function mount(box) {
-    var kind = box.dataset.kind;                       // "certificate" | "project"
-    var url = kind === "certificate" ? "data/certificates.json" : "data/projects.json";
+    var kind = box.dataset.kind;                       // "certificate" | "project" | "blog"
+    var url = DATA[kind];
     var limit = parseInt(box.dataset.limit || "0", 10); // 0 = show all
     var interactive = box.dataset.interactive === "true";
 
@@ -379,7 +461,57 @@
     });
   }
 
+  /* ----- single post page (post.html?p=<id>) ----- */
+  // Image + caption right under it (caption is italic, see .post-fig figcaption in style.css).
+  function buildFigure(b) {
+    var fig = el("figure", "post-fig");
+    var a = el("a");
+    a.href = b.image; a.target = "_blank"; a.rel = "noopener";
+    var img = el("img");
+    img.src = b.image; img.alt = b.caption || b.alt || ""; img.loading = "lazy";
+    img.onerror = function () {
+      a.removeAttribute("href");
+      a.replaceChildren(el("div", "img-missing", "Image not found: " + b.image));
+    };
+    a.appendChild(img);
+    fig.appendChild(a);
+    if (b.caption) fig.appendChild(el("figcaption", "", b.caption));
+    return fig;
+  }
+
+  function mountPost(box) {
+    load(DATA.blog, []).then(function (list) {
+      var id = new URLSearchParams(location.search).get("p") || "";
+      var post = list.filter(function (it) { return it && postId(it) === id; })[0];
+      box.replaceChildren();
+
+      if (!post) {
+        var d = el("div", "empty");
+        d.appendChild(document.createTextNode("Post not found. "));
+        var back = el("a", "", "Back to all posts");
+        back.href = "blog.html";
+        d.appendChild(back);
+        box.appendChild(d);
+        return;
+      }
+
+      document.title = post.title + " · Vũ Quốc Hùng";
+      box.appendChild(el("p", "eyebrow", "// BLOG"));
+      box.appendChild(el("h1", "", post.title));
+      box.appendChild(el("p", "date post-date", formatFullDate(post.date)));
+
+      var content = el("div", "post-body");
+      blocksOf(post).forEach(function (b) {
+        if (typeof b === "string") content.appendChild(el("p", "", b));
+        else if (b && b.heading) content.appendChild(el("h2", "", b.heading));
+        else if (b && b.image) content.appendChild(buildFigure(b));
+      });
+      box.appendChild(content);
+    });
+  }
+
   document.querySelectorAll("[data-kind]").forEach(mount);
+  document.querySelectorAll("[data-post]").forEach(mountPost);
 })(typeof window !== "undefined" ? window : globalThis);
 
 if (typeof module !== "undefined") module.exports = globalThis.PortfolioLogic;
